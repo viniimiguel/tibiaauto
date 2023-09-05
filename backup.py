@@ -30,24 +30,6 @@ class AutoBot():
         self.y = None
 
 
-    def hole(self):
-        down = py.locateCenterOnScreen(self.img_down, confidence=0.7)
-        if down is not None:
-            py.moveTo(down)
-            py.click()
-            sleep(3)
-            hole = py.locateCenterOnScreen(self.img_hole,confidence=0.7)
-            py.moveTo(hole)
-            py.click
-
-    def up(self):
-        up = py.locateCenterOnScreen(self.img_up, confidence=0.7)
-        py.moveTo(up)
-        py.click()
-        sleep(3)
-        rope = py.locateCenterOnScreen(self.img_rope, confidence=0.7)
-        py.moveTo(rope)
-        py.click()
     def detect_first_click(self):
         def on_click(x, y, button, pressed):
             if pressed:
@@ -60,6 +42,27 @@ class AutoBot():
             self.x = int(input('Qual posição do X?: '))
             self.y = int(input('Qual posição do Y?: '))
             sleep(3)
+
+    def up(self):
+        up = py.locateCenterOnScreen(self.img_up, confidence=0.7)
+        py.moveTo(up)
+        py.click()
+        sleep(6)
+        py.press('f7')
+        sleep(0.25)
+        py.click(self.x,self.y,1,1,'left')
+        rope = py.locateCenterOnScreen(self.img_rope, confidence=0.7)
+        py.moveTo(rope)
+        py.click()
+    def hole(self):
+        down = py.locateCenterOnScreen(self.img_down, confidence=0.7)
+        if down is not None:
+            py.moveTo(down)
+            py.click()
+            sleep(3)
+            hole = py.locateCenterOnScreen(self.img_hole,confidence=0.7)
+            py.moveTo(hole)
+            py.click
 
     def cura(self):
         try:
@@ -95,20 +98,13 @@ class AutoBot():
 
     def combo(self):
         actions = [
-            ('f11', 'space'),  
-            ('f6', 'space'),
-            ('f5', 'space'),
-            ('f8', 'space'),
-            ('f5', 'space'),
-            ('f6', 'space'),
-            ('f5', 'space'),
-            ('f11', 'space'),  
-            ('f6', 'space'),
-            ('f5', 'space'),
-            ('f8', 'space'),
-            ('f5', 'space'),
-            ('f6', 'space'),
-            ('f5', 'space'), 
+           ('space','space'),
+           ('space','space'),
+           ('space','space'),
+           ('space','space'),
+           ('space','space'),
+           ('space','space'),
+           ('space','space')
             
         ]
     
@@ -138,25 +134,38 @@ class AutoBot():
         sleep(2)
 
         self.detect_first_click()
-        
-        while True:
-            for img_nome in ['primeiro.png', 'segundo.png', 'terceiro.png','quarto.png', 'quinto.png', 'sexto.png', 'setimo.png', 'oitavo.png']:
-                print('procurando imagem...')
-                local = py.locateCenterOnScreen(img_nome, confidence=0.6)
-                if local is not None:
-                    py.moveTo(local)
-                    py.click(local[0]+45, local[1]+2, button='left') # corrigir para no X ser + 42 e no Y para +2 mudança causada pelo teste fora do OBS
-                    print('Imagem', img_nome, 'encontrada')
-                    py.press('2')
-                    py.press('f12')
-                    sleep(15)
-                    bot.combo()
-                    bot.loot()
+        down_found = False
 
-                else:
-                    print('Imagem', img_nome, 'não localizada')
-                sleep(1)
+        while True:
+            imagens_primeiro_a_oitavo_verificadas = False  # Variável de controle
+
+            while not imagens_primeiro_a_oitavo_verificadas:
+                for img_nome in ['primeiro.png', 'segundo.png', 'terceiro.png', 'quarto.png', 'quinto.png', 'sexto.png', 'setimo.png', 'oitavo.png']:
+                    print('procurando imagem...')
+                    local = py.locateCenterOnScreen(img_nome, confidence=0.6)
+                    if local is not None:
+                        py.moveTo(local)
+                        py.click(local[0], local[1], button='left')
+                        print('Imagem', img_nome, 'encontrada')
+                        py.press('2')
+                        py.press('f12')
+                        sleep(4)
+                        bot.combo()
+                        bot.loot()
+                
+                for img_hole in ['down.png', 'up.png']:
+                    holes = py.locateCenterOnScreen(img_hole, confidence=0.6)
+                    if holes == 'down.png':
+                        bot.hole()
+                        bot.combo()
+                        bot.loot()
+                    elif holes == 'up.png':
+                        bot.hole()
+                        bot.combo()
+                        bot.loot()
+
 
 if __name__ =='__main__':
     bot = AutoBot()
     bot.start()
+

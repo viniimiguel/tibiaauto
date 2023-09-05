@@ -47,7 +47,7 @@ class AutoBot():
             py.moveTo(up)
             py.click()
             sleep(5)
-            py.press('1')
+            py.press('f7')
             rope = py.locateCenterOnScreen(self.img_rope, confidence=0.7)
             py.moveTo(rope)
             py.press('f7')
