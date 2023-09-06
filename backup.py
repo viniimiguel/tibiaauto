@@ -99,12 +99,7 @@ class AutoBot():
     def combo(self):
         actions = [
            ('space','space'),
-           ('space','space'),
-           ('space','space'),
-           ('space','space'),
-           ('space','space'),
-           ('space','space'),
-           ('space','space')
+          
             
         ]
     
@@ -135,11 +130,11 @@ class AutoBot():
 
         self.detect_first_click()
         down_found = False
+        is_up = True  # Variável para controlar se o bot está subindo ou descendo
 
         while True:
-            imagens_primeiro_a_oitavo_verificadas = False  # Variável de controle
-
-            while not imagens_primeiro_a_oitavo_verificadas:
+            if is_up:
+                # Priorize a busca pelas imagens "primeiro.png" a "oitavo.png"
                 for img_nome in ['primeiro.png', 'segundo.png', 'terceiro.png', 'quarto.png', 'quinto.png', 'sexto.png', 'setimo.png', 'oitavo.png']:
                     print('procurando imagem...')
                     local = py.locateCenterOnScreen(img_nome, confidence=0.6)
@@ -150,19 +145,35 @@ class AutoBot():
                         py.press('2')
                         py.press('f12')
                         sleep(4)
-                        bot.combo()
-                        bot.loot()
-                
-                for img_hole in ['down.png', 'up.png']:
-                    holes = py.locateCenterOnScreen(img_hole, confidence=0.6)
-                    if holes == 'down.png':
-                        bot.hole()
-                        bot.combo()
-                        bot.loot()
-                    elif holes == 'up.png':
-                        bot.hole()
-                        bot.combo()
-                        bot.loot()
+                        self.combo()
+                        self.loot()
+
+                # Verifique se existe um "up.png" para subir novamente
+                up_found = py.locateCenterOnScreen('up.png', confidence=0.6)
+                if up_found is not None:
+                    is_up = True
+                    print('executando a ação up')
+                    self.up()  # Execute "up.png"
+                else:
+                    is_up = False
+            else:  # Bot está descendo
+                # Verifique se existe um "down.png" para descer novamente
+                down_found = py.locateCenterOnScreen('down.png', confidence=0.6)
+                if down_found is not None:
+                    print('executando o hole')
+                    self.hole()  # Execute "down.png"
+                else:
+                    is_up = True
+                    # Se não há "down.png", execute "up.png" para subir novamente
+                    up_found = py.locateCenterOnScreen('up.png', confidence=0.6)
+                    if up_found is not None:
+                        print('executando o up')
+                        self.up()  # Execute "up.png"
+                    else:
+                        is_up = False
+
+
+
 
 
 if __name__ =='__main__':
