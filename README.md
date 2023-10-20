@@ -1,4 +1,4 @@
-# tibiaauto
+# tibiaauto <img align="center" alt="html5" src="https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white"/>
 
 ## Pixel bot criado em Python utilizando reconhecimento de imagem e threads para criar um bot de exploração de cavernas para o jogo "Tibia".
 
