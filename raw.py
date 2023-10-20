@@ -147,8 +147,6 @@ class AutoBot():
                     py.moveTo(local)
                     py.click(local[0]+45, local[1]+2, button='left') # corrigir para no X ser + 42 e no Y para +2 mudança causada pelo teste fora do OBS
                     print('Imagem', img_nome, 'encontrada')
-                    py.press('2')
-                    py.press('f12')
                     sleep(15)
                     bot.combo()
                     bot.loot()

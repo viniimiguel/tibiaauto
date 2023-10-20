@@ -179,4 +179,3 @@ class AutoBot():
 if __name__ =='__main__':
     bot = AutoBot()
     bot.start()
-
